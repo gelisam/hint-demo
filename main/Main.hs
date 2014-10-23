@@ -9,9 +9,11 @@ main :: IO ()
 main = do
     print (showIt (SomeShowable 1.0))
     r <- runInterpreter $ do
-      setImports ["Prelude"]
-      n <- interpret "2+2" (as :: Int)
-      lift $ print n
+      setImports ["Prelude", "Showable", "Showable.Bool", "Showable.Int"]
+      showableBool <- interpret "showableBool" (as :: SomeShowable)
+      showableInt <- interpret "showableInt" (as :: SomeShowable)
+      lift $ print (showIt showableBool)
+      lift $ print (showIt showableInt)
     case r of
       Left err -> print err
       Right () -> return ()
